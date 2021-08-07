@@ -1,18 +1,41 @@
-﻿using Azure.Data.Tables;
+﻿using System.Collections.Generic;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Configuration;
-using System;
 
-namespace Warehouse.Data
+namespace Warehouse.Data.Contexts
 {
     public class DbContext
     {
-        public TableServiceClient TableClient { get;}
+        private readonly CloudTableClient _tableClient;
+        private readonly Dictionary<string, CloudTable> _tableClients = new Dictionary<string, CloudTable>();
+        private static readonly object _lock = new object();
         
-        public DbContext(IConfiguration configure, string section)
+        public DbContext(IConfiguration configure)
         {
-            TableClient = new TableServiceClient(
-                new Uri("test"),
-                new TableSharedKeyCredential("accountName", "storageAccountKey"));
+            var azureOptions = new DbOptions();
+            azureOptions.ConnectionString = "";
+            var storageAccountClient = CloudStorageAccount.Parse(azureOptions.ConnectionString);
+            _tableClient = storageAccountClient.CreateCloudTableClient(new TableClientConfiguration());
+        }
+
+        public CloudTable GetTable(string tableName)
+        {
+            if (_tableClients.TryGetValue(tableName, out var table))
+            {
+                return table;
+            }
+
+            lock (_lock)
+            {
+                if (_tableClients.TryGetValue(tableName, out table))
+                {
+                    return table;
+                }
+                table = _tableClient.GetTableReference(tableName);
+                table.CreateIfNotExists();
+                _ = _tableClients.TryAdd(tableName, table);
+                return table;
+            }
         }
     }
 }

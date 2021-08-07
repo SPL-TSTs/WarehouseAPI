@@ -3,12 +3,12 @@ using Warehouse.Data.Entities;
 
 namespace Warehouse.Data.Repositories
 {
-    public interface IDeviceRepository<TKey, TEntity> where TEntity : IEntity<TKey>
+    public interface IDeviceRepository<TEntity> where TEntity : IEntity
     {
-        Task AddAsync(TEntity entity);
-        Task GetByIdAsync(TKey id);
-        Task DeleteByIdAsync(TKey id);
-        Task UpdateAsync(TEntity entity);
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity> GetByIdAsync(string partitionKey, string rowKey);
+        Task DeleteByIdAsync(string partitionKey, string rowKey);
+        Task<TEntity> UpdateAsync(TEntity entity);
 
     }
 }

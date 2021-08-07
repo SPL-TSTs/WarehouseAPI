@@ -1,13 +1,16 @@
-﻿using Azure.Data.Tables.Models;
-using System;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos.Table;
+using Warehouse.Data.Contexts;
 using Warehouse.Data.Entities;
+using Warehouse.Data.Helpers;
 
 namespace Warehouse.Data.Repositories
 {
-    public abstract class DeviceRepository<TKey, TEntity> : IDeviceRepository<TKey, TEntity> where TEntity : Entity<TKey>, new()
+    public abstract class DeviceRepository<TEntity> : IDeviceRepository<TEntity> where TEntity : Entity, new()
     {
-        protected readonly TableItem TableItem;
+        protected readonly CloudTable Repository;
 
         protected DeviceRepository(string tableName, DbContext context)
         {
@@ -21,26 +24,52 @@ namespace Warehouse.Data.Repositories
                 throw new ArgumentNullException(nameof(context));
             }
 
-            TableItem = context.TableClient.CreateTable(tableName);
-        }
-        public Task AddAsync(TEntity entity)
-        {
-            throw new NotImplementedException();
+            Repository = context.GetTable(tableName);
         }
 
-        public Task DeleteByIdAsync(TKey id)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            var insert = TableOperation.Insert(entity);
+            var result = await Repository.ExecuteAsync(insert);
+            result.EnsureSuccessResult();
+            
+            return result.Result as TEntity;
         }
 
-        public Task GetByIdAsync(TKey id)
+        public async Task DeleteByIdAsync(string partitionKey, string rowKey)
         {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(partitionKey, rowKey);
+            if (entity == null)
+            {
+                return;
+            }
+            
+            var delete = TableOperation.Delete(entity);
+            var result = await Repository.ExecuteAsync(delete);
+            result.EnsureSuccessResult();
         }
 
-        public Task UpdateAsync(TEntity entity)
+        public async Task<TEntity> GetByIdAsync(string partitionKey, string rowKey)
         {
-            throw new NotImplementedException();
+            var retrieve = TableOperation.Retrieve<TEntity>(partitionKey, rowKey);
+            var result = await Repository.ExecuteAsync(retrieve);
+            if (result.HttpStatusCode == (int) HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            result.EnsureSuccessResult();
+
+            return result.Result as TEntity;
+        }
+
+        public async Task<TEntity> UpdateAsync(TEntity entity)
+        {
+            var replace = TableOperation.Replace(entity);
+            var result = await Repository.ExecuteAsync(replace);
+            result.EnsureSuccessResult();
+
+            return result.Result as TEntity;
         }
     }
 }

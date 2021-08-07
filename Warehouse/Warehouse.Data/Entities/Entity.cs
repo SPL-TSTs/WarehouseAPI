@@ -1,14 +1,9 @@
-﻿using Azure.Data.Tables;
-using System;
-using Azure;
+﻿using Microsoft.Azure.Cosmos.Table;
 
 namespace Warehouse.Data.Entities
 {
-    public abstract class Entity<TKey> : ITableEntity, IEntity<TKey>
+    public abstract class Entity : TableEntity, IEntity
     {
-        public string PartitionKey { get; set; }
-        public string RowKey { get; set; }
-        public DateTimeOffset? Timestamp { get; set; }
-        public ETag ETag { get; set; }
+        public string SerialNumber { get; set; }
     }
 }

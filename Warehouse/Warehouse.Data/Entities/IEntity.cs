@@ -1,6 +1,6 @@
 ﻿namespace Warehouse.Data.Entities
 {
-    public interface IEntity<TKey>
+    public interface IEntity
     {
     }
 }
