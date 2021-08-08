@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos.Table;
@@ -61,6 +63,20 @@ namespace Warehouse.Data.Repositories
             result.EnsureSuccessResult();
 
             return result.Result as TEntity;
+        }
+
+        public IEnumerable<TEntity> GetListAsync(string partitionKey)
+        {
+            if (string.IsNullOrEmpty(partitionKey))
+            {
+                return null;
+            }
+
+            var query = new TableQuery<TEntity>()
+                .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, partitionKey));
+            var result = Repository.ExecuteQuery(query).ToList();
+            
+            return result;
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)

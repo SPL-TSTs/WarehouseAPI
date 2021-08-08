@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Warehouse.Data.Entities;
 
 namespace Warehouse.Data.Repositories
@@ -7,6 +8,7 @@ namespace Warehouse.Data.Repositories
     {
         Task<TEntity> AddAsync(TEntity entity);
         Task<TEntity> GetByIdAsync(string partitionKey, string rowKey);
+        IEnumerable<TEntity> GetListAsync(string partitionKey);
         Task DeleteByIdAsync(string partitionKey, string rowKey);
         Task<TEntity> UpdateAsync(TEntity entity);
 

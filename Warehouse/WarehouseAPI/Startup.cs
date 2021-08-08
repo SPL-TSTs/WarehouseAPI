@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Warehouse.Data;
+using Warehouse.Business.Mapper;
+using Warehouse.Business.Services;
 using Warehouse.Data.Contexts;
 using Warehouse.Data.Repositories;
 
@@ -21,16 +22,13 @@ namespace WarehouseAPI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //var t = new DbContext(Configuration);
-            services.AddSingleton(provider =>
-            {
-                return new DbContext(Configuration);
-            });
-
+            services.AddAutoMapper(typeof(DeviceMapper));
+            services.AddSingleton(provider => new DbContext(Configuration));
             services.AddTransient<IElectricMeterRepository, ElectricMeterRepository>();
             services.AddTransient<IWaterMeterRepository, WaterMeterRepository>();
             services.AddTransient<IGatewayRepository, GatewayRepository>();
-
+            services.AddTransient<IElectricMeterService, ElectricMeterService>();
+            
             services.AddControllers();
         }
 
