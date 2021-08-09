@@ -1,0 +1,36 @@
+<h1 id="tableLabel">Devices stored</h1>
+
+<nav>
+  <a class="btn btn-primary" (click)="toggleEditor('watermeter')">Fetch Water meters</a>
+  <a class="btn btn-primary" (click)="toggleEditor('electricmeter')">Fetch Electric meters</a>
+  <a class="btn btn-primary" (click)="toggleEditor('gateway')">Fetch Gateways</a>
+</nav>
+
+<p *ngIf="!devices"><em>Loading...</em></p>
+
+<p *ngIf="showGatewayResult">Gateway list:</p>
+<p *ngIf="showElectricMeterResult">Electric meter list:</p>
+<p *ngIf="showWaterMeterResult">Water meter list:</p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="devices">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Serial Number</th>
+      <th>Firmware version</th>
+      <th>State</th>
+      <th *ngIf="showGatewayResult">IP</th>
+      <th *ngIf="showGatewayResult">Port</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let d of devices">
+      <td>{{ d.id }}</td>
+      <td>{{ d.serialNumber }}</td>
+      <td>{{ d.firmwareVersion }}</td>
+      <td>{{ d.state }}</td>
+      <td *ngIf="showGatewayResult">{{ d.iP }}</td>
+      <td *ngIf="showGatewayResult">{{ d.port }}</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,13 @@
+<h1>Add a device</h1>
+
+<nav>
+  <a class="btn btn-primary" (click)="toggleEditor('watermeter')">Add a Water meter</a>
+  <a class="btn btn-primary" (click)="toggleEditor('electricmeter')">Add a Electric meter</a>
+  <a class="btn btn-primary" (click)="toggleEditor('gateway')">Add a Gateway</a>
+</nav>
+<br/>
+<app-water-meter class="btn btn-light" *ngIf="showWaterForm"></app-water-meter>
+
+<app-electric-meter class="btn btn-light" *ngIf="showElectricForm"></app-electric-meter>
+
+<app-gateway class="btn btn-light" *ngIf="showGatewayForm"></app-gateway>

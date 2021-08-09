@@ -1,0 +1,16 @@
+<div>
+  <h3>Electric meter</h3>
+  <form [formGroup]="electricMeterForm" (ngSubmit)="onSubmit()">
+    <label for="SerialNumber">Serial Number: </label>
+    <input id="SerialNumber" type="text" formControlName="SerialNumber" required>
+
+    <label for="FirmwareVersion">Firmware Version: </label>
+    <input id="FirmwareVersion" type="text" formControlName="FirmwareVersion">
+
+    <label for="State">State: </label>
+    <input id="State" type="text" formControlName="State">
+
+    <p>Complete the form to enable button.</p>
+    <button type="submit" [disabled]="!electricMeterForm.valid">Submit</button>
+  </form>
+</div>
