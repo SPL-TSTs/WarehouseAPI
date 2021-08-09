@@ -5,7 +5,7 @@ namespace Warehouse.Data.Repositories
 {
     public class GatewayRepository : DeviceRepository<GatewayEntity>, IGatewayRepository
     {
-        public GatewayRepository(DbContext context) : base("Meters", context)
+        public GatewayRepository(DbContext context) : base("Gateway", context)
         {
         }
     }

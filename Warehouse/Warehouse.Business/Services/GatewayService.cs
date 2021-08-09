@@ -20,13 +20,13 @@ namespace Warehouse.Business.Services
             _gatewayRepo = gatewayRepo ?? throw new ArgumentNullException(nameof(gatewayRepo));
         }
 
-        public async Task<bool> ExistDeviceAsync(Device device)
+        public async Task<bool> ExistDeviceAsync(GatewayModel device)
         {
-            var result = await _gatewayRepo.GetByIdAsync(device.Type.ToString(), device.SerialNumber) != null;
+            var result = await _gatewayRepo.GetByIdAsync(DeviceTypes.Gateway.ToString(), device.SerialNumber) != null;
             return result;
         }
 
-        public async Task<GatewayModel> AddDeviceAsync(Device device)
+        public async Task<GatewayModel> AddDeviceAsync(GatewayModel device)
         {
             var electricEntity = _mapper.Map<GatewayEntity>(device);
             var result = await _gatewayRepo.AddAsync(electricEntity);

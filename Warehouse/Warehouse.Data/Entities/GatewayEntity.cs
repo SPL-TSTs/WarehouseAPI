@@ -6,5 +6,10 @@
         public string State { get; set; }
         public string IP { get; set; }
         public int?  Port { get; set; }
+
+        public GatewayEntity()
+        {
+            PartitionKey = "Gateway";
+        }
     }
 }

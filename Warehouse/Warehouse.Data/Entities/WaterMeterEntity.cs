@@ -4,5 +4,10 @@
     {
         public string FirmwareVersion { get; set; }
         public string State { get; set; }
+
+        public WaterMeterEntity()
+        {
+            PartitionKey = "WaterMeter";
+        }
     }
 }

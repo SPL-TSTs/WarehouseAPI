@@ -9,7 +9,7 @@ using Warehouse.Data.Repositories;
 
 namespace Warehouse.Business.Services
 {
-    class WaterMeterService : IWaterMeterService
+    public class WaterMeterService : IWaterMeterService
     {
         private readonly IMapper _mapper;
         private readonly IWaterMeterRepository _waterMeterRepo;
@@ -20,13 +20,13 @@ namespace Warehouse.Business.Services
             _waterMeterRepo = waterMeterRepo ?? throw new ArgumentNullException(nameof(waterMeterRepo));
         }
 
-        public async Task<bool> ExistDeviceAsync(Device device)
+        public async Task<bool> ExistDeviceAsync(WaterMeterModel device)
         {
-            var result = await _waterMeterRepo.GetByIdAsync(device.Type.ToString(), device.SerialNumber) != null;
+            var result = await _waterMeterRepo.GetByIdAsync(DeviceTypes.WaterMeter.ToString(), device.SerialNumber) != null;
             return result;
         }
 
-        public async Task<WaterMeterModel> AddDeviceAsync(Device device)
+        public async Task<WaterMeterModel> AddDeviceAsync(WaterMeterModel device)
         {
             var electricEntity = _mapper.Map<WaterMeterEntity>(device);
             var result = await _waterMeterRepo.AddAsync(electricEntity);

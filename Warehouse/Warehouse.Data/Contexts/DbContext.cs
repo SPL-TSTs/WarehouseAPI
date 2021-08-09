@@ -12,9 +12,8 @@ namespace Warehouse.Data.Contexts
         
         public DbContext(IConfiguration configure)
         {
-            var azureOptions = new DbOptions();
-            azureOptions.ConnectionString = "";
-            var storageAccountClient = CloudStorageAccount.Parse(azureOptions.ConnectionString);
+            var connString = configure.GetSection("AzureConnectionString").Value;
+            var storageAccountClient = CloudStorageAccount.Parse(connString);
             _tableClient = storageAccountClient.CreateCloudTableClient(new TableClientConfiguration());
         }
 

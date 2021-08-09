@@ -20,18 +20,29 @@ namespace Warehouse.Business.Services
             _electricMeterRepo = electricMeterRepo ?? throw new ArgumentNullException(nameof(electricMeterRepo));
         }
 
-        public async Task<bool> ExistDeviceAsync(Device device)
+        public async Task<bool> ExistDeviceAsync(ElectricMeterModel device)
         {
-            var result = await _electricMeterRepo.GetByIdAsync(device.Type.ToString(), device.SerialNumber) != null;
+            var result = await _electricMeterRepo.GetByIdAsync(DeviceTypes.ElectricMeter.ToString(), device.SerialNumber) != null;
             return result;
         }
 
-        public async Task<ElectricMeterModel> AddDeviceAsync(Device device)
+        public async Task<ElectricMeterModel> AddDeviceAsync(ElectricMeterModel device)
         {
-            var electricEntity = _mapper.Map<ElectricMeterEntity>(device);
-            var result = await _electricMeterRepo.AddAsync(electricEntity);
+            try
+            {
+                var electricEntity = _mapper.Map<ElectricMeterEntity>(device);
+                var result = await _electricMeterRepo.AddAsync(electricEntity);
 
-            return _mapper.Map<ElectricMeterModel>(result);
+                return _mapper.Map<ElectricMeterModel>(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
+
+            
         }
 
         public IEnumerable<ElectricMeterModel> GetAll()

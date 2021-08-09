@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Warehouse.Business.Enums;
 using Warehouse.Business.Models;
 using Warehouse.Business.Services;
 
@@ -19,16 +18,11 @@ namespace WarehouseAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Device device)
+        public async Task<IActionResult> Post([FromBody] ElectricMeterModel device)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
-            }
-
-            if (device.Type != DeviceTypes.ElectricMeter)
-            {
-                return BadRequest($"Device type is not valid : {device.Type.ToString()}");
             }
 
             if (await _electricMeterService.ExistDeviceAsync(device))
@@ -44,6 +38,7 @@ namespace WarehouseAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            var t = new OkObjectResult(_electricMeterService.GetAll());
             return new OkObjectResult(_electricMeterService.GetAll());
         }
 

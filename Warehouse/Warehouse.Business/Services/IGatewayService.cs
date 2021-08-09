@@ -6,8 +6,8 @@ namespace Warehouse.Business.Services
 {
     public interface IGatewayService
     {
-        public Task<bool> ExistDeviceAsync(Device device);
-        public Task<GatewayModel> AddDeviceAsync(Device device);
+        public Task<bool> ExistDeviceAsync(GatewayModel device);
+        public Task<GatewayModel> AddDeviceAsync(GatewayModel device);
         public IEnumerable<GatewayModel> GetAll();
     }
 }

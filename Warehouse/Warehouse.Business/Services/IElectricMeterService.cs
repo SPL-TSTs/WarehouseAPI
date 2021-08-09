@@ -6,8 +6,8 @@ namespace Warehouse.Business.Services
 {
     public interface IElectricMeterService
     {
-        public Task<bool> ExistDeviceAsync(Device device);
-        public Task<ElectricMeterModel> AddDeviceAsync(Device device);
+        public Task<bool> ExistDeviceAsync(ElectricMeterModel device);
+        public Task<ElectricMeterModel> AddDeviceAsync(ElectricMeterModel device);
         public IEnumerable<ElectricMeterModel> GetAll();
     }
 }

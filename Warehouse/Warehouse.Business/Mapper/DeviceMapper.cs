@@ -8,20 +8,20 @@ namespace Warehouse.Business.Mapper
     {
         public DeviceMapper()
         {
-            CreateMap<Device, ElectricMeterEntity>()
+            CreateMap<ElectricMeterModel, ElectricMeterEntity>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.SerialNumber))
-                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Type.ToString()));
+                .ForMember(dest => dest.PartitionKey, opt => opt.Ignore());
             
-            CreateMap<Device, WaterMeterEntity>()
+            CreateMap<WaterMeterModel, WaterMeterEntity>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.SerialNumber))
-                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Type.ToString()));
+                .ForMember(dest => dest.PartitionKey, opt => opt.Ignore());
             
-            CreateMap<Device, GatewayEntity>()
+            CreateMap<GatewayModel, GatewayEntity>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.SerialNumber))
-                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Type.ToString()));
+                .ForMember(dest => dest.PartitionKey, opt => opt.Ignore());
             
             CreateMap<ElectricMeterEntity, ElectricMeterModel>()
                 .ForMember(dest => dest.SerialNumber, opt => opt.MapFrom(src => src.RowKey));
